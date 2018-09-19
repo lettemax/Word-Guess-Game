@@ -1,36 +1,25 @@
 // Functions for Kanye West Hangman
 
-// Declare and fill array of albums
-var albums = ['College Dropout', 'Late Registration', 'Graduation', '808s & Heartbreak',
-                    'My Beautiful Dark Twisted Fantasy', 'Yeezus', 'Life of Pablo', 'Ye'];
+// Declare and fill dictionary of Kanye song: album [cover image] key pairs
+var songs = {"all falls down": "College_Dropout.jpg", "we dont care": "College_Dropout.jpg", "spaceship": "College_Dropout.jpg", "jesus walks": "College_Dropout.jpg", 
+            "heard em say": "Late_Registration.jpg", "touch the sky": "Late_Registration.jpg", "gold digger": "Late_Registration.jpg", "hey mama": "Late_Registration.jpg", 
+            "good morning": "Graduation.jpg", "stronger": "Graduation.jpg", "cant tell me nothing": "Graduation.jpg", "flashing lights": "Graduation.jpg",
+            "say you will": "808s_&_Heartbreak.jpg", "welcome to heartbreak": "808s_&_Heartbreak.jpg", "amazing": "808s_&_Heartbreak.jpg", "paranoid": "808s_&_Heartbreak.jpg",
+            "dark fantasy": "My_Beautiful_Dark_Twisted_Fantasy.jpg", "power": "My_Beautiful_Dark_Twisted_Fantasy.jpg", "all of the lights": "My_Beautiful_Dark_Twisted_Fantasy.jpg", "monster": "My_Beautiful_Dark_Twisted_Fantasy.jpg",
+            "new slaves": "Yeezus.png", "im in it": "Yeezus.png", "blood on the leaves": "Yeezus.png", "bound 2": "Yeezus.png", 
+            "ultralight beam": "Life_of_Pablo.jpg", "waves": "Life_of_Pablo.jpg", "wolves": "Life_of_Pablo.jpg", "real friends": "Life_of_Pablo.jpg", 
+            "i thought about killing you": "Ye.jpg", "all mine": "Ye.jpg", "ghost town": "Ye.jpg", "violent crimes": "Ye.jpg"}; 
 
-
-// Declare and fill album arrays with songs
-var collegeDropout = ['All Falls Down', "We Dont Care", 'Spaceship', 'Jesus Walks'];
-var lateRegistration = ["Heard Em Say", "Touch the Sky", "Gold Digger", "Hey Mama"];
-var graduation = ["Good Morning", "Stronger", "Cant Tell Me Nothing", "Flashing Lights"];
-var heartbreak = ["Say You Will", "Welcome to Hearbreak", "Amazing", "Paranoid"];
-var myBeautiful = ["Dark Fantasy", "Power", "All of the Lights", "Monster"];
-var yeezus = ["New Slaves", "Im in it", "Blood on the leaves", "Bound 2"];
-var lifeOfPablo = ["Ultralight Beam", "Waves", "Wolves", "Real Friends"];
-var ye = ["I Thought About Killing You", "All Mine", "Ghost Town", "Violent Crimes"];
-
-// Declare and fill array of album cover images
-var albumCoverImages = ['College_Dropout.jpg', 'Late_Registration.jpg', 'Graduation.jpg', '808s_&_Heartbreak.jpg',
-                        'My_Beautiful_Dark_Twisted_Fantasy.jpg', 'Yeezus.png', 'Life_of_Pablo.jpg', 'Ye.jpg'];
-
+// Declare first song when window loads
+var firstSong = '';
 
 // Functions to get first song when window loads
 
 // When the textOrange button is pressed...
-$("#textOrange").on("click", function() {
-	// Change funText to orange.
-	$("#funText").css("color", "orange")
-})
-
-
-// When the window loads
-window.onload = getSong();
+// $("#textOrange").on("click", function() {
+// 	// Change funText to orange.
+// 	$("#funText").css("color", "orange")
+// })
 
 // Function to get random number 0-7
 function getAlbumNum() {
@@ -68,15 +57,19 @@ function getSong() {
 // Function to get number of lines and spaces for board
 function generateBoard() {
     // Get number of characters (including spaces) of song
-    var songArr = getSong().split();
+    var song = getSong();
     // 
-    var arr;
+    var board = [];
     //
-    for (var i=0; i<songArr.length; i++) {
-         arr.push('placeholder');
+    for (var i=0; i<song.length; i++) {
+        if (song[i] == ' ') {
+            board.push(' ');
+        } else {
+            board.push('_');
+        }
     }
 
-    
+    return board.toString();
 
 }
 
@@ -92,4 +85,7 @@ function loadGame() {
     // 
 
 }
+
+// When the window loads
+window.onload = getSong();
 
