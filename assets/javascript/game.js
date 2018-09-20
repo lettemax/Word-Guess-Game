@@ -29,10 +29,11 @@ var album6 = "Life_of_Pablo.jpg";
 var album7 = "Ye.jpg";
 
 // Declare object songObj with properties title and album 
-var songObj = {
-    title: "",
-    album: ""
-};
+// var songObj = {
+//     title: "",
+//     album: "",
+//     initialBoard: title
+// };
 
 
 // Declare current song variable
@@ -47,10 +48,6 @@ var guesses = [];
 var beenGuessed = false;
 // Declare and assign value to correctGuess variable
 var correctGuess = false;
-// Declare and assign value needNew variable
-var needNew = false;
-// Declare wrong guesses variable
-var wrongGuesses = 0;
 // Declare guesses left variable
 var guessesLeft = 6;
 // Declare variable for album cover file
@@ -61,7 +58,7 @@ var albumCoverFile = '';
 function getRandomSong () {
     ind = Math.floor(Math.random() * 31);
     song = songs[ind];
-    console.log(song);
+    console.log('song: '+song);
     console.log('---');
     return song;
 }
@@ -69,12 +66,12 @@ function getRandomSong () {
 function getBoard () {
     for (i=0; i<song.length; i++) {
         if (song[i] == '|') {
-            board.push(' '); 
+            board.push('|'); 
         } else {
             board.push('_');
         }
     }
-    console.log(board + "a");
+    console.log('board: '+board);
     console.log('---');
     return board;
 }
@@ -105,17 +102,17 @@ $(document).ready(function() {
     song = getRandomSong();
     // Get album cover 
     albumCoverFile = 'assets/images/'+getAlbumCoverFile();
-    console.log(albumCoverFile);
+    console.log('albumCoverFile: '+albumCoverFile);
     console.log('---');
-    // Change albumCover html element
+    // Set albumCover html element
     document.getElementById('album-cover').src = albumCoverFile;
     $("#albumCover").css("src", albumCoverFile);
     // Get board
     board = getBoard();
-    console.log(board.toString());
-    // Change board html element
+    // Set board html element
     document.getElementById('board').textContent = board.toString();
-    console.log(document.getElementById('board').textContent + 't');
+    console.log('board: '+document.getElementById('board').textContent);
+    console.log('---');
 });
 
 // Function to reset turn
@@ -123,7 +120,6 @@ function reset () {
     guesses = [];
     beenGuessed = false;
     correctGuess = false;
-    wrongGuesses = 0;
     guessesLeft = 6;
     song = getRandomSong();
     board = getBoard();
@@ -131,7 +127,7 @@ function reset () {
 
 // Function to check to see if need new song
 function checkForReset () {
-    if (wrongGuesses>guessesLeft) {
+    if (guessesLeft<1) {
         alert("You're out of guesses!");
         document.getElementById('board').textContent = song;
     }
@@ -140,40 +136,73 @@ function checkForReset () {
     }
 }
 
+// Function to show song title when user fails
+function showSongTitle () {
+    document.getElementById('board').textContent = song;
+}
+
+// Function to let user know they've already guessed letter
+function alreadyGuessed () {
+    document.getElementById("aviso").textContent = "You have already guessed " + currentGuess;
+}
+
+// Function to check if valid guess is correct
+function checkValidGuess () {
+    for (var i=0; i<song.length; i++) {
+        if (song[i] == guess) {
+            // Set correct guess to true
+            correctGuess = true;
+            // Set successful aviso 
+            correctGuess();
+            // Update board
+            board[i] = guess;  
+            return;            
+        }
+    }
+    if (!correctGuess) {
+        guessesLeft--;
+        checkForReset();
+        return;
+    }
+}
+
+// Function to let user know they've won
+function winConfirmed () {
+    document.getElementById("aviso").textContent = "You've correctly guessed the song title!";
+}
+
+// Function to check to see if user has won
+function checkForWin () {
+    if (song == board) {
+        winConfirmed();
+    }
+        
+}
+
+// Function to let user know they've guessed a correct letter
+function correctGuess () {
+    document.getElementById("aviso").textContent = "Nice!";
+}
+
 // Function to execute on each guess
-function checkGuess () {
-    //
-    // assign value of key pressed to guess
+function guessing () {
+    // Assign value of key pressed to guess
     var guess = '';
     document.onkeyup = function (event) {
         guess = event.key;
-        for (var i=0; i<guesses.length; i++) {
-            if (guess == guesses[i]) {
-                beenGuessed = true;
-                document.getElementById("aviso").textContent = "You have already guessed " + currentGuess;
-                return;               
-            } 
+        console.log('guess: '+guess);
+        console.log('---');
+        // If letter has been already guessed, then let user know and end function
+        if (guesses.includes(guess)) {
+            alreadyGuessed(); 
+            return;
+        // Else add the guess to guess array and check to see if it matches any letters in song title             
+        } else { 
+            guesses.push(guess);
+            checkValidGuess();
         }
-        guesses.push(guess);
-    }
-    // loop to see if letter has been guessed
-    
-    // if has been guessed, change aviso div text to
-    // "you already guessed ${currentGuess}"
-    // if (beenGuessed) {
-    //     document.getElementById("aviso").textContent = "You have already guessed " + currentGuess;
-    } else {
-        for (var i=0; i<song.length; i++) {
-            if (song[i] == guess) {
-                // Set correct guess to true
-                correctGuess = true;
-                // Set successful aviso 
-                document.getElementById("aviso").textContent = "Nice!";
-                // Update board
-                board[i] = guess;              
-            }
-        }
-        if (correctGuess == false) {      
-    }
-
+    }   
 }
+   
+
+
