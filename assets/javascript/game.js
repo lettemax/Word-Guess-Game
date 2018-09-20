@@ -98,11 +98,6 @@ function getAlbumCoverFile () {
         return album7;
     }
 }
-
-// function to update board 
-function updateBoard () {
-    document.getElementById('board').textContent = board;
-}
         
 // Set up game when window loads
 $(document).ready(function() {
@@ -127,6 +122,11 @@ $(document).ready(function() {
     console.log('---');
 });
 
+// function to update board 
+function updateBoard () {
+    document.getElementById('board').textContent = board;
+}
+
 // Function to reset turn
 function reset () {
     // Reset all variables to starting values
@@ -138,12 +138,12 @@ function reset () {
     board = '';
     albumCoverFile = '';
     ind = -1;
-
     // Update song
-    updateSong();
-
+    getRandomSong();
     // Update board
     createInitialBoard();
+    // Update album cover
+    getAlbumCoverFile();
 }
 
 // Function to tell user they've failed and reveal song title
@@ -159,13 +159,8 @@ function checkForReset () {
     console.log('---');
     // If out of guesses, alert user then ask if they want next song
     if (guessesLeft<1) {
-        board = song;
-        updateBoard();
-        alert("You're out of guesses! The song title has been revealed");
-        if (confirm("Next song?")) {
             failed();
             reset();
-        }
     }
 }
 
@@ -183,14 +178,14 @@ function correctGuessMade () {
 function checkValidGuess () {
     for (var i=0; i<song.length; i++) {
         if (song[i] == guess) {
-            // Set correct guess to true
-            correctGuess = true;
             // Set successful aviso 
             correctGuessMade();
             // Update board var
             board[i] = guess;  
             // Update board element
-            updateBoard();         
+            updateBoard();    
+            // Set correct guess to true
+            correctGuess = true;     
         }
     }
     if (!correctGuess) {
@@ -202,7 +197,7 @@ function checkValidGuess () {
 
 // Function to update guesses-left div
 function updateGuessesLeftDiv () {
-    document.getElementById("guesses-left").textContent = guessesLeft;
+    document.getElementById("guesses-left").textContent = 'guesses left: ' + guessesLeft;
 }
 
 // Function to let user know they've won
