@@ -42,6 +42,8 @@ var song = '';
 var ind;
 // Declare current board variable
 var board = [];
+// Declare guess variable and assign empty string
+var guess = '';
 // Declare array to save guesses
 var guesses = [];
 // Declare variable to indicate whether or not letter has been guessed
@@ -63,7 +65,8 @@ function getRandomSong () {
     return song;
 }
 
-function getBoard () {
+// Function to create initial board based on new word
+function createInitialBoard () {
     for (i=0; i<song.length; i++) {
         if (song[i] == '|') {
             board.push('|'); 
@@ -71,8 +74,8 @@ function getBoard () {
             board.push('_');
         }
     }
-    console.log('board: '+board);
-    console.log('---');
+    console.log('board: ' + board);
+    console.log('***');
     return board;
 }
 
@@ -95,20 +98,29 @@ function getAlbumCoverFile () {
         return album7;
     }
 }
+
+// function to update board 
+function updateBoard () {
+    document.getElementById('board').textContent = board;
+}
         
 // Set up game when window loads
 $(document).ready(function() {
     // Get song
     song = getRandomSong();
+
     // Get album cover 
     albumCoverFile = 'assets/images/'+getAlbumCoverFile();
     console.log('albumCoverFile: '+albumCoverFile);
     console.log('---');
+
     // Set albumCover html element
     document.getElementById('album-cover').src = albumCoverFile;
     $("#albumCover").css("src", albumCoverFile);
+
     // Get board
-    board = getBoard();
+    board = createInitialBoard();
+
     // Set board html element
     document.getElementById('board').textContent = board.toString();
     console.log('board: '+document.getElementById('board').textContent);
@@ -117,33 +129,54 @@ $(document).ready(function() {
 
 // Function to reset turn
 function reset () {
+    // Reset all variables to starting values
     guesses = [];
     beenGuessed = false;
     correctGuess = false;
     guessesLeft = 6;
-    song = getRandomSong();
-    board = getBoard();
+    song = '';
+    board = '';
+    albumCoverFile = '';
+    ind = -1;
+
+    // Update song
+    updateSong();
+
+    // Update board
+    createInitialBoard();
+}
+
+// Function to tell user they've failed and reveal song title
+function failed () {
+    document.getElementById('board').textContent = song;
+    document.getElementById('aviso').textContent = "You're out of guesses. Time for a new song";
+    reset();
 }
 
 // Function to check to see if need new song
 function checkForReset () {
+    console.log("checked for reset");
+    console.log('---');
+    // If out of guesses, alert user then ask if they want next song
     if (guessesLeft<1) {
-        alert("You're out of guesses!");
-        document.getElementById('board').textContent = song;
+        board = song;
+        updateBoard();
+        alert("You're out of guesses! The song title has been revealed");
+        if (confirm("Next song?")) {
+            failed();
+            reset();
+        }
     }
-    if (confirm("Next song?")) {
-        reset();
-    }
-}
-
-// Function to show song title when user fails
-function showSongTitle () {
-    document.getElementById('board').textContent = song;
 }
 
 // Function to let user know they've already guessed letter
 function alreadyGuessed () {
-    document.getElementById("aviso").textContent = "You have already guessed " + currentGuess;
+    document.getElementById("aviso").textContent = "You have already guessed " + guess;
+}
+
+// Function to let user know they've guessed a correct letter
+function correctGuessMade () {
+    document.getElementById("aviso").textContent = "Nice!";
 }
 
 // Function to check if valid guess is correct
@@ -153,17 +186,23 @@ function checkValidGuess () {
             // Set correct guess to true
             correctGuess = true;
             // Set successful aviso 
-            correctGuess();
-            // Update board
+            correctGuessMade();
+            // Update board var
             board[i] = guess;  
-            return;            
+            // Update board element
+            updateBoard();         
         }
     }
     if (!correctGuess) {
         guessesLeft--;
         checkForReset();
-        return;
     }
+    correctGuess = false;
+}
+
+// Function to update guesses-left div
+function updateGuessesLeftDiv () {
+    document.getElementById("guesses-left").textContent = guessesLeft;
 }
 
 // Function to let user know they've won
@@ -175,22 +214,13 @@ function winConfirmed () {
 function checkForWin () {
     if (song == board) {
         winConfirmed();
-    }
-        
+    }     
 }
 
-// Function to let user know they've guessed a correct letter
-function correctGuess () {
-    document.getElementById("aviso").textContent = "Nice!";
-}
-
-// Function to execute on each guess
-function guessing () {
-    // Assign value of key pressed to guess
-    var guess = '';
-    document.onkeyup = function (event) {
-        guess = event.key;
-        console.log('guess: '+guess);
+// Function executed when key pressed
+document.onkeypress = function (event) {
+    guess = event.key;
+    console.log('guess: '+guess);
         console.log('---');
         // If letter has been already guessed, then let user know and end function
         if (guesses.includes(guess)) {
@@ -201,8 +231,11 @@ function guessing () {
             guesses.push(guess);
             checkValidGuess();
         }
-    }   
+    updateGuessesLeftDiv();
 }
+
+
+
    
 
 
