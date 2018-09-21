@@ -23,7 +23,7 @@
         #game-box {
             margin-top: 20px;
             margin-left: 25%;
-            width: 80%;
+            width: 90%;
             border-style: dashed;
         }
 
@@ -35,13 +35,30 @@
             float: left;
         }
 
-        #board, #aviso, #guesses-left, #guesses {
+        #board, #aviso, #guesses {
             float: left;
             margin-left: 15%;
             margin-bottom: 2%;
             padding-top: 10px;
             font-size: 30px;
         }
+
+        #wins {
+            /* float: left; */
+            margin-bottom: 2%;
+            padding-top: 10px;
+            font-size: 30px; 
+            margin-left: 15%;       
+        }
+
+        #guesses-left {
+            float: left;
+            margin-bottom: 2%;
+            padding-top: 10px;
+            font-size: 30px;
+        }
+
+
 
 
     </style>
@@ -61,7 +78,8 @@
                 <div id="aviso">guess a letter</div>
             </div>          
             <div class="row">
-                <div id="guesses-left">guesses left: 6</div>
+                <div class="col-md-4" id="wins">wins: 0</div>
+                <div class="col-md-5" id="guesses-left">guesses left: 6</div>
             </div>
             <div class="row">
                 <div id="guesses">guesses: </div>

@@ -39,6 +39,8 @@ var ind = -1;
 var guess = '';
 var guesses = [];
 
+var wins = 0;
+
 var guessesLeft = 6;
 
 var beenGuessed = false;
@@ -132,6 +134,13 @@ function updateAlbumCover () {
 function updateGuessesDiv () {
     console.log('updateGuessesDiv started');
     document.getElementById('guesses').textContent = 'guesses: ' + guesses;
+    console.log('updateGuessesDiv started');
+}
+
+// function to update guesses div
+function updateWinsDiv () {
+    console.log('updateGuessesDiv started');
+    document.getElementById('wins').textContent = 'wins: ' + wins;
     console.log('updateGuessesDiv started');
 }
 
@@ -248,7 +257,9 @@ function greatSuccessAviso () {
 // Function to let user know they've won
 function winConfirmed () {
     console.log("winConfirmed() started");
-    // updateBoard();
+    wins = wins + 1;
+    updateWinsDiv();
+    console.log(wins);
     greatSuccessAviso();
     console.log("about to check for win+++"); 
 
