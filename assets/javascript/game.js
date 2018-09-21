@@ -1,12 +1,21 @@
 // array of 32 kanye songs, 4 songs from each of 8 latest albums
-var songs = ["all|falls|down", "we|dont|care", "spaceship", "jesus|walks", 
-            "heard|em|say", "touch|the|sky", "gold|digger", "hey|mama", 
-            "good|morning", "stronger", "cant|tell|me|nothing", "flashing|lights",
-            "say|you|will", "welcome|to|heartbreak", "amazing", "paranoid",
-            "dark|fantasy", "power", "all|of|the|lights", "monster",
-            "new|slaves", "im|in|it", "blood|on|the|leaves", "bound|2", 
-            "ultralight|beam", "waves", "wolves", "real|friends", 
-            "i|thought|about|killing|you", "all|mine", "ghost|town", "violent|crimes"]; 
+// var songs = ["all|falls|down", "we|dont|care", "spaceship", "jesus|walks", 
+//             "heard|em|say", "touch|the|sky", "gold|digger", "hey|mama", 
+//             "good|morning", "stronger", "cant|tell|me|nothing", "flashing|lights",
+//             "say|you|will", "welcome|to|heartbreak", "amazing", "paranoid",
+//             "dark|fantasy", "power", "all|of|the|lights", "monster",
+//             "new|slaves", "im|in|it", "blood|on|the|leaves", "bound|2", 
+//             "ultralight|beam", "waves", "wolves", "real|friends", 
+//             "i|thought|about|killing|you", "all|mine", "ghost|town", "violent|crimes"];
+
+var songs = ["all falls down", "we dont care", "spaceship", "jesus walks", 
+            "heard em say", "touch the sky", "gold digger", "hey mama", 
+            "good morning", "stronger", "cant tell me nothing", "flashing lights",
+            "say you will", "welcome to heartbreak", "amazing", "paranoid",
+            "dark fantasy", "power", "all of the lights", "monster",
+            "new slaves", "im in it", "blood on the leaves", "bound 2", 
+            "ultralight beam", "waves", "wolves", "real friends", 
+            "i thought about killing you", "all mine", "ghost town", "violent crimes"]; 
 
 // one variable for each album cover file
 var album0 = "College_Dropout.jpg";
@@ -51,8 +60,8 @@ function getRandomSong () {
 // function to create initial board based on song
 function createInitialBoard () {
     for (i=0; i<song.length; i++) {        
-        if (song[i] == '|') {
-            board.push('|');
+        if (song[i] == ' ') {
+            board.push(' ');
         } else {
             board.push('_');
         }
@@ -119,6 +128,13 @@ function updateAlbumCover () {
     console.log('updateAlbumCover ended');
 }
 
+// function to update guesses div
+function updateGuessesDiv () {
+    console.log('updateGuessesDiv started');
+    document.getElementById('guesses').textContent = 'guesses: ' + guesses;
+    console.log('updateGuessesDiv started');
+}
+
 // function to reset aviso div after failure
 function resetAviso () {
     console.log('updateAviso started');
@@ -144,6 +160,9 @@ function reset () {
     guessesLeft = 6;
     ind = -1;
     songArr = [];
+
+    document.getElementById('aviso').style.color = "black";
+
     // Update song
     song = getRandomSong();
     // Update songArr
@@ -157,6 +176,7 @@ function reset () {
 
     updateBoard();
     updateAlbumCover();
+    updateGuessesDiv();
     resetAviso();
     resetGuessesLeftDiv();
     console.log("reset ended");
@@ -165,6 +185,7 @@ function reset () {
 function failAviso () {
     console.log("failAviso() started");
     document.getElementById('aviso').textContent = "yeezus, you failed so hard";
+    document.getElementById('aviso').style.color = "red";
     console.log("failAviso() started");
 }
 
@@ -220,6 +241,7 @@ function correctGuessMade () {
 function greatSuccessAviso () {
     console.log("greatSuccessAviso() started");
     document.getElementById("aviso").textContent = "great success!!!!";
+    document.getElementById('aviso').style.color = "green";
     console.log("greatSuccessAviso() ended");
 }
 
@@ -310,6 +332,7 @@ document.onkeypress = function (event) {
         }
     updateGuessesLeftDiv();
     updateBoard();
+    updateGuessesDiv();
     console.log("donkeypress ended");
 }
 
