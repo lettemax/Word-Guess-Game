@@ -129,7 +129,7 @@ function resetAviso () {
 // function to reset guesses-left div
 function resetGuessesLeftDiv () {
     console.log('resetGuessesLeftDiv started');
-    document.getElementById('guesses-left').textContent = guessesLeft;
+    document.getElementById('guesses-left').textContent = "guesses left: " + guessesLeft;
     console.log('resetGuessesLeftDiv ended');
 }
 
@@ -143,8 +143,13 @@ function reset () {
     correctGuess = false;
     guessesLeft = 6;
     ind = -1;
+    songArr = [];
     // Update song
     song = getRandomSong();
+    // Update songArr
+    for (var i=0; i<song.length; i++ ) {
+        songArr[i] = song[i];
+    }
     // Update board
     board = createInitialBoard();
     // Update album cover
@@ -157,12 +162,26 @@ function reset () {
     console.log("reset ended");
 }
 
+function failAviso () {
+    console.log("failAviso() started");
+    document.getElementById('aviso').textContent = "yeezus, you failed so hard";
+    console.log("failAviso() started");
+}
+
 // Function to tell user they've failed and reveal song title
 function failed () {
     console.log("failed() started");
+    board = songArr;
+    updateBoard();
+    failAviso();
+
+    setTimeout(function (){
+        // Something you want delayed.
+        reset();
+    }, 1600);
+
     // document.getElementById('board').textContent = song;
     // document.getElementById('aviso').textContent = "You're out of guesses. Time for a new song";
-    reset();
     console.log("failed() ended");
 }
 
@@ -183,6 +202,13 @@ function alreadyGuessed () {
     console.log("alreadyGuessed() ended");
 }
 
+// function to change aviso after incorrect guess
+function incorrectGuess () {
+    console.log("incorrectGuess started");
+    document.getElementById("aviso").textContent = guess + " is not in there";
+    console.log("incorrectGuess ended");
+}
+
 // Function to let user know they've guessed a correct letter
 function correctGuessMade () {
     console.log("correctGuessMade() started");
@@ -190,11 +216,26 @@ function correctGuessMade () {
     console.log("correctGuessMade() ended");
 }
 
+// set aviso text to "great success!!!!"
+function greatSuccessAviso () {
+    console.log("greatSuccessAviso() started");
+    document.getElementById("aviso").textContent = "great success!!!!";
+    console.log("greatSuccessAviso() ended");
+}
+
 // Function to let user know they've won
 function winConfirmed () {
     console.log("winConfirmed() started");
-    alert("You've correctly guessed the song title!");
-    console.log("updateGuessesLeftDiv() ended");
+    // updateBoard();
+    greatSuccessAviso();
+    console.log("about to check for win+++"); 
+
+    setTimeout(function (){
+    // Something you want delayed.
+        reset();         
+    }, 1300);
+
+    console.log("winConfirmed() ended");
 }
 
 // Function to check to see if user has won
@@ -206,10 +247,11 @@ function checkForWin () {
             count++
         }
     }
+    console.log(songArr + "/" + board);
     if (count == songArr.length) {
+        updateBoard();
         winConfirmed();
         console.log("passed winConfirmed***");
-        reset();
     }     
     console.log("checkForWin() ended");
 }
@@ -228,11 +270,17 @@ function checkValidGuess () {
             // Set correct guess to true
             correctGuess = true; 
             console.log("about to check for win+++");    
-            checkForWin();
+            // setTimeout(function (){
+
+                // Something you want delayed.
+                checkForWin();
+              
+            //   }, 1000);
         }
     }
     if (!correctGuess) {
         guessesLeft--;
+        incorrectGuess();
         checkForReset();
     }
     correctGuess = false;
